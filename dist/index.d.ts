@@ -1,3 +1,4 @@
 export * from './interfaces/producto.interface';
-export * from './interfaces/valoracion';
+export * from './interfaces/valoracion.interface';
+export * from './interfaces/traduccion.interface';
 export * from './helpers/productos.helper';

@@ -15,5 +15,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./interfaces/producto.interface"), exports);
-__exportStar(require("./interfaces/valoracion"), exports);
+__exportStar(require("./interfaces/valoracion.interface"), exports);
+__exportStar(require("./interfaces/traduccion.interface"), exports);
 __exportStar(require("./helpers/productos.helper"), exports);
