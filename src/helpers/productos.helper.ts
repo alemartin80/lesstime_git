@@ -15,7 +15,7 @@ export function validarProducto(producto: Producto): boolean {
 }
 
 export function getTexto(elementos: Traduccion[], idioma: string): string {
-
+  console.log('getTexto', elementos, idioma)
   try {
     return elementos?.filter((n: any) => {
       return n.idioma == idioma;

@@ -14,6 +14,7 @@ function validarProducto(producto) {
     return tieneTamaños || tienePrecioBase;
 }
 function getTexto(elementos, idioma) {
+    console.log('getTexto', elementos, idioma);
     try {
         return elementos?.filter((n) => {
             return n.idioma == idioma;
