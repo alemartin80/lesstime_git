@@ -18,3 +18,4 @@ __exportStar(require("./interfaces/producto.interface"), exports);
 __exportStar(require("./interfaces/valoracion.interface"), exports);
 __exportStar(require("./interfaces/traduccion.interface"), exports);
 __exportStar(require("./helpers/productos.helper"), exports);
+__exportStar(require("./helpers/texto.helper"), exports);
