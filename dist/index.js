@@ -22,6 +22,7 @@ __exportStar(require("./interfaces/producto-opcion-opcion.interface"), exports);
 __exportStar(require("./interfaces/categoria.interface"), exports);
 __exportStar(require("./interfaces/utensilio-detalle.interface"), exports);
 __exportStar(require("./interfaces/alergeno.interface"), exports);
+__exportStar(require("./interfaces/pago.interface"), exports);
 __exportStar(require("./helpers/productos.helper"), exports);
 __exportStar(require("./helpers/texto.helper"), exports);
 __exportStar(require("./helpers/firebase.helper"), exports);
