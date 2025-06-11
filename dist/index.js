@@ -24,3 +24,4 @@ __exportStar(require("./interfaces/utensilio-detalle.interface"), exports);
 __exportStar(require("./helpers/productos.helper"), exports);
 __exportStar(require("./helpers/texto.helper"), exports);
 __exportStar(require("./helpers/firebase.helper"), exports);
+__exportStar(require("./helpers/pagos.helper"), exports);

@@ -9,3 +9,4 @@ export * from './interfaces/utensilio-detalle.interface';
 export * from './helpers/productos.helper';
 export * from './helpers/texto.helper';
 export * from './helpers/firebase.helper';
+export * from './helpers/pagos.helper';
