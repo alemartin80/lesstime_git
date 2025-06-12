@@ -5,7 +5,6 @@ exports.generarUuid = generarUuid;
 exports.getID = getID;
 const uuid_1 = require("uuid");
 function getTexto(elementos, idioma) {
-    console.log('getTexto', elementos, idioma);
     try {
         return elementos?.filter((n) => {
             return n.idioma == idioma;

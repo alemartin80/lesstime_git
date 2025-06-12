@@ -2,7 +2,7 @@ import { Traduccion } from '../interfaces/traduccion.interface';
 import { v4 as uuidv4 } from 'uuid';
 
 export function getTexto(elementos: Traduccion[], idioma: string): string {
-  console.log('getTexto', elementos, idioma)
+ 
   try {
     return elementos?.filter((n: any) => {
       return n.idioma == idioma;

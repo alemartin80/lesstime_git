@@ -7,6 +7,7 @@ export * from './interfaces/categoria.interface';
 export * from './interfaces/utensilio-detalle.interface';
 export * from './interfaces/alergeno.interface';
 export * from './interfaces/pago.interface';
+
 export * from './helpers/productos.helper';
 export * from './helpers/texto.helper';
 export * from './helpers/firebase.helper';
