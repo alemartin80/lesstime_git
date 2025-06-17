@@ -4,7 +4,7 @@ import { Producto } from '../interfaces/producto.interface';
 import { generarUuid, getID } from './texto.helper';
 
 export async function
-  modelarPago(http: any, establecimiento: Establecimiento,origen:string,lesstime: boolean,
+  modelarPago(http: any, establecimiento: Establecimiento, origen: string, lesstime: boolean,
     tipo: string, uidTipo: string, tipoPago: string,
     cantidadObjeto: any, saldoAPagar: any, propina: any,
     tipoFactura: string, datosFactura: any,
@@ -91,7 +91,7 @@ export async function
   pago.zz_fiskaly_enviado = false;
   pago.impuestosTotal = imp.impuestoTotal
   pago.items = convertirProductos(productos);
- 
+
   return pago
 }
 
@@ -143,7 +143,8 @@ export function convertirProductos(productos: Producto[]): any[] {
       system: {
         type: "REGULAR",
         category: {
-          type: "VAT"
+          type: "VAT",
+          rate: p.porcentajeiva.toString()
         }
       }
     })

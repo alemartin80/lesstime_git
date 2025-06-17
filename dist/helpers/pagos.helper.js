@@ -115,7 +115,8 @@ function convertirProductos(productos) {
             system: {
                 type: "REGULAR",
                 category: {
-                    type: "VAT"
+                    type: "VAT",
+                    rate: p.porcentajeiva.toString()
                 }
             }
         });
