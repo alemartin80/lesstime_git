@@ -1,0 +1,62 @@
+import { DatosFactura } from "./datos-factura.interface";
+import { Direccion } from "./direccion.interface";
+import { Experiencia } from "./experiencia.interface";
+
+export interface Usuario {
+    uid?: string;
+    qr?: string;
+    email?: string;
+    nombre?: string;
+    apellidos?: string;
+    foto?: string;
+    fechanacimiento?: Date;
+    permitePush?: boolean;
+    permiteEmail?: boolean;
+    estado?: string;
+    latitud?: number;
+    longitud?: number;
+    ultimaConexion?: Date;
+    conectado?: boolean;
+    fotosMeGusta?: string[];
+    telefono?: string;
+    pushToken?: string;
+    pushuserId?: string;
+    alergenos?: string[];
+    direcciones?: Direccion[];
+    numeroReservas?: number;
+    numeroPedidos?: number;
+    edad?: number;
+    esMenor?: boolean;
+    emailVerificado?: boolean;
+    idioma?: string;
+    productosFavoritos?: any[];
+    establecimientosFavoritos?: any[];
+    valoracionesUid?: string[];
+    datosFacturacion?: DatosFactura[];
+    fotosSubidas?: string[];
+    //repasarlo
+    megusta?: number;
+    favoritos?: number;
+    fotos?: number;
+    telefonoVerificado?: boolean;
+    reintentosTelefono?: number;
+    otp?: string;
+    saldo?: number;
+    oneSignalId?: string;
+    resenasEstablecimientos?: string[];
+    reservas?: any;
+    historicoServiciosBorrados?: string[];
+    historicoPedidosBorrados?: string[];
+    historicoReservasBorrados?: string[];
+    historicoPagosBorrados?: string[];
+    //Para la bolsa de empleo
+    tiposEmpleo?: any[];
+    idiomas?: string[];
+    vehiculoPropio?: boolean;
+    disponible?: boolean;
+    sexo?: string;
+    observacionesEmpleo?: string;
+    cartadepresentacion?: string;
+    experiencia?: Experiencia[];
+    provincias?: any[];
+}
