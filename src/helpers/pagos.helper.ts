@@ -1,6 +1,7 @@
 import { Establecimiento } from '../interfaces/establecimiento.interface';
 import { Pago } from '../interfaces/pago.interface';
 import { Producto } from '../interfaces/producto.interface';
+import { Usuario } from '../interfaces/usuario.interface';
 import { generarUuid, getID } from './texto.helper';
 
 export async function
@@ -9,8 +10,7 @@ export async function
     cantidadObjeto: any, saldoAPagar: any, propina: any,
     tipoFactura: string, datosFactura: any,
     observaciones: string,
-    productos: Producto[], uidUsuario: string, email: string,
-    telefono: string, production: boolean, urlMoneiPhp: string): Promise<Pago> {
+    productos: Producto[], usuario: Usuario, production: boolean, urlMoneiPhp: string): Promise<Pago> {
 
   let pago: Pago = {}
   pago.uid = getID();
@@ -22,8 +22,8 @@ export async function
 
     let urlGenerado = false;
     let cantidad = Number(cantidadObjeto.toFixed(2))
-    const respuesta: any = await pagophp(http,
-      cantidad, pago.uid, tipo + uidTipo, email, telefono, production, urlMoneiPhp);
+    const respuesta: any = await getPagoMonei(http,
+      cantidad, pago.uid, usuario, production, urlMoneiPhp);
 
     if (respuesta != undefined) {
       urlGenerado = true;
@@ -38,7 +38,7 @@ export async function
   }
 
   pago.fecha = new Date();
-  pago.uidUsuario = uidUsuario;
+  pago.uidUsuario = usuario.uid;
   pago.uidTipo = uidTipo;
   pago.tipo = tipo;
   pago.uidEstablecimiento = establecimiento.uid
@@ -154,7 +154,7 @@ export function convertirProductos(productos: Producto[]): any[] {
 
 }
 
-export function pagophp(http: any, cantidad: number, orderId: string, descripcion: string, email: string, telefono: string, production: boolean, urlMoneiPhp: string): Promise<any> {
+export function getPagoMonei(http: any, cantidad: number, orderId: string, usuario: Usuario, production: boolean, urlMoneiPhp: string): Promise<any> {
   return new Promise(async resolve => {
     let cantidadPor100 = Number(cantidad * 100).toFixed(0);
     let datos = {
@@ -162,10 +162,10 @@ export function pagophp(http: any, cantidad: number, orderId: string, descripcio
       amount: cantidadPor100.toString(),
       currency: "EUR",
       orderId: orderId,
-      description: descripcion,
-      email: email,
+      // description: descripcion,
+      email: usuario.email,
       fecha: new Date(),
-      phone: telefono, // null//"+34 605429701"
+      phone: usuario.telefono, // null//"+34 605429701"
       production: production
     }
 

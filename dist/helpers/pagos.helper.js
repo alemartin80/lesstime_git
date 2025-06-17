@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.modelarPago = modelarPago;
 exports.impuestos = impuestos;
 exports.convertirProductos = convertirProductos;
-exports.pagophp = pagophp;
+exports.getPagoMonei = getPagoMonei;
 const texto_helper_1 = require("./texto.helper");
-async function modelarPago(http, establecimiento, origen, lesstime, tipo, uidTipo, tipoPago, cantidadObjeto, saldoAPagar, propina, tipoFactura, datosFactura, observaciones, productos, uidUsuario, email, telefono, production, urlMoneiPhp) {
+async function modelarPago(http, establecimiento, origen, lesstime, tipo, uidTipo, tipoPago, cantidadObjeto, saldoAPagar, propina, tipoFactura, datosFactura, observaciones, productos, usuario, production, urlMoneiPhp) {
     let pago = {};
     pago.uid = (0, texto_helper_1.getID)();
     pago.url = '';
@@ -14,7 +14,7 @@ async function modelarPago(http, establecimiento, origen, lesstime, tipo, uidTip
         //se genera el link
         let urlGenerado = false;
         let cantidad = Number(cantidadObjeto.toFixed(2));
-        const respuesta = await pagophp(http, cantidad, pago.uid, tipo + uidTipo, email, telefono, production, urlMoneiPhp);
+        const respuesta = await getPagoMonei(http, cantidad, pago.uid, usuario, production, urlMoneiPhp);
         if (respuesta != undefined) {
             urlGenerado = true;
             pago.url = respuesta.url;
@@ -25,7 +25,7 @@ async function modelarPago(http, establecimiento, origen, lesstime, tipo, uidTip
         }
     }
     pago.fecha = new Date();
-    pago.uidUsuario = uidUsuario;
+    pago.uidUsuario = usuario.uid;
     pago.uidTipo = uidTipo;
     pago.tipo = tipo;
     pago.uidEstablecimiento = establecimiento.uid;
@@ -123,7 +123,7 @@ function convertirProductos(productos) {
     }
     return items;
 }
-function pagophp(http, cantidad, orderId, descripcion, email, telefono, production, urlMoneiPhp) {
+function getPagoMonei(http, cantidad, orderId, usuario, production, urlMoneiPhp) {
     return new Promise(async (resolve) => {
         let cantidadPor100 = Number(cantidad * 100).toFixed(0);
         let datos = {
@@ -131,10 +131,10 @@ function pagophp(http, cantidad, orderId, descripcion, email, telefono, producti
             amount: cantidadPor100.toString(),
             currency: "EUR",
             orderId: orderId,
-            description: descripcion,
-            email: email,
+            // description: descripcion,
+            email: usuario.email,
             fecha: new Date(),
-            phone: telefono, // null//"+34 605429701"
+            phone: usuario.telefono, // null//"+34 605429701"
             production: production
         };
         let myData = JSON.stringify(datos);
