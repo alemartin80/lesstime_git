@@ -29,7 +29,7 @@ export function agruparProductos(productosTotal: ProductoComanda[]): any {
 
 export function agruparImpuestos(productos: Producto[]): any {
   let bases = [];
-  let porcentajes = Array.from(new Set(productos.map(dato => { return dato.porcentajeiva })).values()).sort();
+  //let porcentajes = Array.from(new Set(productos.map(dato => { return dato.porcentajeiva })).values()).sort();
   let resumenImpuestos: any = {};
 
   for (let i in productos) {
@@ -82,3 +82,29 @@ export function convertirProductosMonei(productos: Producto[]): any[] {
 
 }
 
+
+export function agruparProductosPorUsuario(productosTotal: ProductoComanda[]) {
+
+  let productos: any = [];
+  const result = productosTotal.filter(producto => {
+    const agrupados = productosTotal.reduce((acumulador: any, producto) => {
+      const clave = `${producto.uid}-${producto.tamanyos}-${producto.opciones}-${producto.observaciones}-${producto.uidUsuario}`;
+
+      if (!acumulador[clave]) {
+        acumulador[clave] = {
+          ...producto,
+          cantidad: 0,
+          total: 0
+        };
+      }
+
+      acumulador[clave].cantidad += producto.cantidad;
+      acumulador[clave].total += producto.total;
+
+      return acumulador;
+
+    }, {});
+    productos = Object.values(agrupados);
+  })
+  return productos
+}
