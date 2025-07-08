@@ -16,6 +16,10 @@ export * from './interfaces/datos-factura.interface';
 export * from './interfaces/utensilio.interface';
 export * from './interfaces/experiencia.interface';
 export * from './interfaces/foto.interface';
+export * from './interfaces/foto-cliente.interface';
+export * from './interfaces/empleado.interface';
+export * from './interfaces/mesa.interface'
+
 export * from './helpers/productos.helper';
 export * from './helpers/texto.helper';
 export * from './helpers/firebase.helper';

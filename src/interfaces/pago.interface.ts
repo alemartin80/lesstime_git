@@ -26,7 +26,7 @@ export interface Pago {
   prefijo?: string;
   numeroFactura?: number;
   procesado?: boolean;
-  observaciones?: string;
+  
   uuid?: string;
   items?: any;
   zz_fiskaly_enviado?: boolean;

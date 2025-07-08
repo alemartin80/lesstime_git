@@ -1,2 +1,3 @@
-export declare function calcularPrecioConIVA(base: number, iva: number): number;
-export declare function validarProducto(producto: any): boolean;
+import { Producto } from "../interfaces/producto.interface";
+export declare function agruparImpuestos(productos: Producto[]): any;
+export declare function convertirProductosMonei(productos: Producto[]): any[];
