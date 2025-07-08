@@ -1,6 +1,31 @@
+import { ProductoComanda } from "../interfaces/producto-comanda.interface";
 import { Producto } from "../interfaces/producto.interface";
 
+export function agruparProductos(productosTotal: ProductoComanda[]): any {
 
+  let productos: any = [];
+  const result = productosTotal.filter(producto => {
+    const agrupados = productosTotal.reduce((acumulador: any, producto) => {
+      const clave = `${producto.uid}-${producto.tamanyos}-${producto.opciones}-${producto.observaciones}`;
+
+      if (!acumulador[clave]) {
+        acumulador[clave] = {
+          ...producto,
+          cantidad: 0,
+          total: 0
+        };
+      }
+
+      acumulador[clave].cantidad += producto.cantidad;
+      acumulador[clave].total += producto.total;
+
+      return acumulador;
+
+    }, {});
+    productos = Object.values(agrupados);
+  })
+  return productos
+}
 
 export function agruparImpuestos(productos: Producto[]): any {
   let bases = [];

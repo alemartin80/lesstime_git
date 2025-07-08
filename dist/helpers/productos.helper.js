@@ -1,7 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.agruparProductos = agruparProductos;
 exports.agruparImpuestos = agruparImpuestos;
 exports.convertirProductosMonei = convertirProductosMonei;
+function agruparProductos(productosTotal) {
+    let productos = [];
+    const result = productosTotal.filter(producto => {
+        const agrupados = productosTotal.reduce((acumulador, producto) => {
+            const clave = `${producto.uid}-${producto.tamanyos}-${producto.opciones}-${producto.observaciones}`;
+            if (!acumulador[clave]) {
+                acumulador[clave] = {
+                    ...producto,
+                    cantidad: 0,
+                    total: 0
+                };
+            }
+            acumulador[clave].cantidad += producto.cantidad;
+            acumulador[clave].total += producto.total;
+            return acumulador;
+        }, {});
+        productos = Object.values(agrupados);
+    });
+    return productos;
+}
 function agruparImpuestos(productos) {
     let bases = [];
     let porcentajes = Array.from(new Set(productos.map(dato => { return dato.porcentajeiva; })).values()).sort();

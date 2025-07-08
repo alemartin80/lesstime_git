@@ -1,0 +1,101 @@
+import { Mesa } from "./mesa.interface";
+import { ProductoComanda } from "./producto-comanda.interface";
+import { Reserva } from "./reserva.interface";
+import { UsuarioServicio } from "./usuario-servicio.interface";
+import { Utensilio } from "./utensilio.interface";
+
+export interface Servicio {
+  uid?: string;
+  mesas?: Mesa[];
+  lesstime?: boolean;
+  mesasuid?: string[];
+  nombreServicio?: string;
+  uidEstablecimiento?: string;
+  nombreEstablecimiento?: string;
+  fotoEstablecimiento?: string;
+  estado?: string;
+  fotos?: any[];
+  sala?: string;
+  comensales?: number;
+  comensalesRegistrados?: number;
+
+  //Informacion de los usuarios
+  uids?: string[];
+  uidPendiente?: string[];
+  usuariosInvitados?: any[];
+  uidSalida?: any[];
+  uidTodos?: string[];
+  uidEnMesa?: string[];
+  usuariosInfo?: UsuarioServicio[];
+
+  alergenos?: string[];
+  turno?: number;
+  tipo?: string;
+  utensilios?: Utensilio[];
+
+  //Camarero
+
+  flag_camarero?: boolean;
+  flag_validarPago?: boolean;
+  flag_utensilios?: boolean;
+  flag_comandaPediente?: boolean;
+  flag_ampliacion?: boolean;
+
+
+  comandasEnviadas?: number;
+
+  valoracionesUid?: string[];
+
+  //fechas
+  fechaInicio?: Date;
+  fechaConfirmacion?: Date;
+  fechaFin?: Date;
+
+  //info dinero
+  // precioComensales?: number;
+  pendiente?: number;
+  cantidad?: number;
+  total?: number;
+  cubiertos?: number;
+  cubiertosPrecio?: number;
+  cubiertosNombre?: any;
+  propina?: number;
+  pendienteValidar?: number;
+  pagoPendiente?: boolean;
+  envioComandaLessTime?: boolean;
+  precioComensalComidaIva?: string;
+  precioComensalComidaPorcentajeIva?: number;
+
+  //detalle pagos
+  pagos?: string[];
+  pagado?: number;
+  //descuentos
+  descuentoProductos?: number;
+  descuentoTotal?: number;
+  descuentoServicio?: number;
+  descuentoCantidad?: number;
+  descuentoTipo?: string;
+  descuentoInvitacion?: number;
+  impuestosTotal?: number;
+  impuestosDetalle?: any;
+  /**
+   * Estos datos son calculados para facilitar el mostrarlos
+   */
+  pagoMiCuenta?: number;
+  pagoPorPersona?: number;
+  productosTotalPorProducto?: any;
+  productosTotalPorComensal?: any;
+  productosComandaPorProducto?: any;
+  productosComandaPorComensal?: any;
+
+  nombreUsuarios?: any[];
+  cuentaPorPersona?: number[];
+  cuentaPorPersonaProducto?: number[];
+  enMesa?: boolean;
+  productos?: ProductoComanda[];
+  pagosDetalle?: any[];
+  reserva?: Reserva;
+
+
+
+}
