@@ -76,4 +76,5 @@ export interface Servicio {
     productos?: ProductoComanda[];
     pagosDetalle?: any[];
     reserva?: Reserva;
+    cobrarPorComensal?: boolean;
 }

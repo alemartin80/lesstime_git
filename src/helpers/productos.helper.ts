@@ -27,7 +27,7 @@ export function agruparProductos(productosTotal: ProductoComanda[]): any {
   return productos
 }
 
-export function agruparImpuestos(productos: Producto[]): any {
+export function agruparImpuestos(productos: any[]): any {
   let bases = [];
   //let porcentajes = Array.from(new Set(productos.map(dato => { return dato.porcentajeiva })).values()).sort();
   let resumenImpuestos: any = {};

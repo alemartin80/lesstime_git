@@ -69,6 +69,7 @@ export interface Establecimiento {
     envioComandaLessTime?: boolean;
     precioComensalComidaIva?: string;
     precioComensalComidaPorcentajeIva?: number;
+    cobrarPorComensal?: boolean;
     descripcionPrecioComensal?: Traduccion[];
     pagoTotalReserva?: boolean;
     horarioBarra?: Horario[];

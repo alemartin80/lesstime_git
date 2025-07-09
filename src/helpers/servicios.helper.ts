@@ -6,6 +6,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { UsuarioServicio } from '../interfaces/usuario-servicio.interface';
 import { getID } from './texto.helper';
 import { Reserva } from '../interfaces/reserva.interface';
+import { ProductoComanda } from '../interfaces/producto-comanda.interface';
+import { Comanda } from '../interfaces/comanda.interface';
+import { collection, doc, increment, writeBatch } from 'firebase/firestore';
+import { agruparImpuestos } from './productos.helper';
 
 export function modelarServicio(
   establecimiento: Establecimiento,
@@ -15,15 +19,8 @@ export function modelarServicio(
   comensales: number,
   usuarioInput: any, reserva: Reserva = {}) {
 
-
-  //debugger
-
-
-
   let servicio: Servicio = {};
   let hoy = new Date();
-
-
   servicio.mesas = [];
   servicio.mesasuid = [];
   servicio.sala = '';
@@ -40,6 +37,7 @@ export function modelarServicio(
   servicio.nombreEstablecimiento = establecimiento.nombre;
   servicio.fotoEstablecimiento = establecimiento.foto
   servicio.envioComandaLessTime = establecimiento.envioComandaLessTime
+  servicio.cobrarPorComensal = establecimiento.cobrarPorComensal
   servicio.precioComensalComidaIva = establecimiento.precioComensalComidaIva
   servicio.precioComensalComidaPorcentajeIva = establecimiento.precioComensalComidaPorcentajeIva
   servicio.cubiertosPrecio = establecimiento.precioComensalComida
@@ -133,4 +131,89 @@ export function modelarServicio(
   return servicio;
 
 
+}
+
+
+export function enviarComanda(firestore: any, coleccion: string, servicio: Servicio, productos: ProductoComanda[], observaciones: string, usuario: UsuarioServicio) {
+
+
+  let comanda: Comanda = {};
+  comanda.cantidad = productos.reduce((anterior, producto) => anterior + (producto.cantidad || 0), 0);
+  comanda.total = Number(productos.reduce((anterior, producto) => anterior + Number(producto.total), 0).toFixed(2));
+  comanda.enviadaCocina = new Date();
+  comanda.estado = "enviada";
+  comanda.observaciones = observaciones;
+  comanda.uidUsuario = usuario.uid;
+  comanda.nombreUsuario = usuario.nombre;
+  let comandasEnviadas: number = servicio.comandasEnviadas || 0;
+  comanda.numeroComanda = comandasEnviadas + 1;
+  comanda.qr = 'C_' + servicio.uid + '/)' + comanda.numeroComanda;
+
+  servicio.comandasEnviadas = comandasEnviadas + 1;
+
+  let productosServicio: ProductoComanda[] = [];
+  productosServicio = [...servicio.productos || []];
+
+
+  comanda.uid = getID();
+  const refServicio = doc(
+    firestore,
+    coleccion + "/" + servicio.uid
+  );
+  const refComanda = doc(
+    firestore,
+    coleccion + "/" + servicio.uid + "/Comandas/" + comanda.uid
+  );
+  const batch = writeBatch(firestore);
+
+  for (let i in productos) {
+    const prod: any = productos[i];
+    prod.enviado = true;
+    prod.numeroComanda = servicio.comandasEnviadas;
+    const refProducto = doc
+      (
+        firestore,
+        coleccion +
+        "/" +
+        servicio.uid +
+        "/Productos/" +
+        prod.clave
+      );
+    batch.update(refProducto, prod);
+  }
+  productosServicio.push(...productos);
+  let salidaImpuestos: any = agruparImpuestos(productosServicio)
+  let servicioTotal: number = servicio.total || 0
+  let descuentoProductos: number = servicio.descuentoProductos || 0;
+  //Calcular los descuentos
+  let auxTotal: number = Number(servicioTotal.toFixed(2)) + Number(comanda.total.toFixed(2))
+  let auxTotalConDescuento: number = auxTotal - Number(descuentoProductos.toFixed(2));
+  let descuentoServicio: number = 0;
+  if (servicio.descuentoTipo == 'cantidad') {
+    descuentoServicio = servicio.descuentoCantidad || 0;
+  }
+  if (servicio.descuentoTipo == 'porcentaje') {
+    descuentoServicio = auxTotalConDescuento * (servicio.descuentoCantidad || 0) / 100;
+  }
+
+  let pagado: number = servicio.pagado || 0;
+  let descuentoTotal = descuentoProductos + descuentoServicio;
+  let pendiente = auxTotalConDescuento - descuentoTotal - pagado;
+
+
+  batch.update(refServicio, {
+    comandasEnviadas: increment(1),
+    cantidad: increment(comanda.cantidad),
+    total: increment(Number(comanda.total.toFixed(2))),
+    flag_comandaPediente: true,
+    impuestosTotal: Number(salidaImpuestos.impuestoTotal.toFixed(2)),
+    impuestosDetalle: salidaImpuestos.bases,
+    descuentoServicio: descuentoServicio,
+    pendiente: Number(pendiente.toFixed(2)),
+    descuentoTotal: descuentoTotal
+  });
+  batch.set(refComanda, comanda);
+
+
+  batch.commit();
 }
