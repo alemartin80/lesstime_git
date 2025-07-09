@@ -6,4 +6,5 @@ import { Reserva } from '../interfaces/reserva.interface';
 import { ProductoComanda } from '../interfaces/producto-comanda.interface';
 import { Firestore } from 'firebase/firestore';
 export declare function crearServicio(firestore: Firestore, coleccion: string, establecimiento: Establecimiento, tipo: string, mesa: Mesa, nombreServicio: string, comensales: number, usuarioInput: any, reserva?: Reserva): Servicio;
+export declare function N26(): void;
 export declare function enviarComanda(firestore: Firestore, coleccion: string, servicio: Servicio, productos: ProductoComanda[], observaciones: string, usuario: UsuarioServicio): void;

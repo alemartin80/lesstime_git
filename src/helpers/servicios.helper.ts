@@ -135,7 +135,9 @@ export function crearServicio(firestore: Firestore, coleccion: string,
 
 
 }
+export function N26() {
 
+}
 
 export function enviarComanda(firestore: Firestore, coleccion: string, servicio: Servicio, productos: ProductoComanda[], observaciones: string, usuario: UsuarioServicio) {
   try {

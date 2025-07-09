@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.crearServicio = crearServicio;
+exports.N26 = N26;
 exports.enviarComanda = enviarComanda;
 const texto_helper_1 = require("./texto.helper");
 const firestore_1 = require("firebase/firestore");
@@ -100,6 +101,8 @@ function crearServicio(firestore, coleccion, establecimiento, tipo, mesa, nombre
     }
     (0, firestore_1.setDoc)((0, firestore_1.doc)(firestore, coleccion + '' + servicio.uid), servicio);
     return servicio;
+}
+function N26() {
 }
 function enviarComanda(firestore, coleccion, servicio, productos, observaciones, usuario) {
     try {
