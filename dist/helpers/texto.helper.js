@@ -8,11 +8,11 @@ function getTexto(elementos, idioma) {
     try {
         return elementos?.filter((n) => {
             return n.idioma == idioma;
-        })[0]?.texto || 'sin salida falta traducir';
+        })[0]?.texto || 'falta traducir';
     }
     catch (error) {
         console.error('getTraduccion ERROR', elementos, error);
-        return 'sin salida falta traducir';
+        return 'falta traducir';
     }
 }
 function generarUuid() {

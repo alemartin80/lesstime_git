@@ -9,6 +9,19 @@ lerna-debug.log*
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+# Excluir archivos innecesarios
+src/
+node_modules/
+tests/
+test/
+coverage/
+*.spec.ts
+*.ts
+tsconfig*
+copy-to-app.js
+.gitignore
+.npmignore
+*.md
 
 # Runtime data
 pids

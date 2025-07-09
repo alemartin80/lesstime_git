@@ -6,16 +6,16 @@ export function getTexto(elementos: Traduccion[], idioma: string): string {
   try {
     return elementos?.filter((n: any) => {
       return n.idioma == idioma;
-    })[0]?.texto || 'sin salida falta traducir'
+    })[0]?.texto || 'falta traducir'
 
   } catch (error) {
     console.error('getTraduccion ERROR', elementos, error)
-    return 'sin salida falta traducir'
+    return 'falta traducir'
   }
 
 
 }
-
+ 
 export function generarUuid(): string {
 
   return uuidv4();

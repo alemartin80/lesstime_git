@@ -102,63 +102,77 @@ function crearServicio(firestore, coleccion, establecimiento, tipo, mesa, nombre
     return servicio;
 }
 function enviarComanda(firestore, coleccion, servicio, productos, observaciones, usuario) {
-    let comanda = {};
-    comanda.cantidad = productos.reduce((anterior, producto) => anterior + (producto.cantidad || 0), 0);
-    comanda.total = Number(productos.reduce((anterior, producto) => anterior + Number(producto.total), 0).toFixed(2));
-    comanda.enviadaCocina = new Date();
-    comanda.estado = "enviada";
-    comanda.observaciones = observaciones;
-    comanda.uidUsuario = usuario.uid;
-    comanda.nombreUsuario = usuario.nombre;
-    let comandasEnviadas = servicio.comandasEnviadas || 0;
-    comanda.numeroComanda = comandasEnviadas + 1;
-    comanda.qr = 'C_' + servicio.uid + '/)' + comanda.numeroComanda;
-    servicio.comandasEnviadas = comandasEnviadas + 1;
-    let productosServicio = [];
-    productosServicio = [...servicio.productos || []];
-    comanda.uid = (0, texto_helper_1.getID)();
-    const refServicio = (0, firestore_1.doc)(firestore, coleccion + "/" + servicio.uid);
-    const refComanda = (0, firestore_1.doc)(firestore, coleccion + "/" + servicio.uid + "/Comandas/" + comanda.uid);
-    const batch = (0, firestore_1.writeBatch)(firestore);
-    for (let i in productos) {
-        const prod = productos[i];
-        prod.enviado = true;
-        prod.numeroComanda = servicio.comandasEnviadas;
-        const refProducto = (0, firestore_1.doc)(firestore, coleccion +
-            "/" +
-            servicio.uid +
-            "/Productos/" +
-            prod.clave);
-        batch.update(refProducto, prod);
+    try {
+        let comanda = {};
+        comanda.cantidad = productos.reduce((anterior, producto) => anterior + (producto.cantidad || 0), 0);
+        comanda.total = Number(productos.reduce((anterior, producto) => anterior + Number(producto.total), 0).toFixed(2));
+        comanda.enviadaCocina = new Date();
+        comanda.estado = "enviada";
+        comanda.observaciones = observaciones;
+        comanda.uidUsuario = usuario.uid;
+        comanda.nombreUsuario = usuario.nombre;
+        let comandasEnviadas = servicio.comandasEnviadas || 0;
+        comanda.numeroComanda = comandasEnviadas + 1;
+        comanda.qr = 'C_' + servicio.uid + '/)' + comanda.numeroComanda;
+        servicio.comandasEnviadas = comandasEnviadas + 1;
+        let productosServicio = [];
+        productosServicio = [...servicio.productos || []];
+        comanda.uid = (0, texto_helper_1.getID)();
+        console.log('enviarComanda', coleccion, servicio.uid, comanda.uid, productos);
+        const refServicio = (0, firestore_1.doc)(firestore, coleccion + "/" + servicio.uid);
+        const refComanda = (0, firestore_1.doc)(firestore, coleccion + "/" + servicio.uid + "/Comandas/" + comanda.uid);
+        console.log('enviarComanda', refServicio, refComanda);
+        const batch = (0, firestore_1.writeBatch)(firestore);
+        console.log('despues de crear el batch');
+        for (let i in productos) {
+            const prod = productos[i];
+            prod.enviado = true;
+            prod.numeroComanda = servicio.comandasEnviadas;
+            const refProducto = (0, firestore_1.doc)(firestore, coleccion +
+                "/" +
+                servicio.uid +
+                "/Productos/" +
+                prod.clave);
+            console.log('productos', refProducto);
+            batch.update(refProducto, prod);
+        }
+        productosServicio.push(...productos);
+        let salidaImpuestos = (0, productos_helper_1.agruparImpuestos)(productosServicio);
+        let servicioTotal = servicio.total || 0;
+        let descuentoProductos = servicio.descuentoProductos || 0;
+        //Calcular los descuentos
+        let auxTotal = Number(servicioTotal.toFixed(2)) + Number(comanda.total.toFixed(2));
+        let auxTotalConDescuento = auxTotal - Number(descuentoProductos.toFixed(2));
+        let descuentoServicio = 0;
+        if (servicio.descuentoTipo == 'cantidad') {
+            descuentoServicio = servicio.descuentoCantidad || 0;
+        }
+        if (servicio.descuentoTipo == 'porcentaje') {
+            descuentoServicio = auxTotalConDescuento * (servicio.descuentoCantidad || 0) / 100;
+        }
+        let pagado = servicio.pagado || 0;
+        let descuentoTotal = descuentoProductos + descuentoServicio;
+        let pendiente = auxTotalConDescuento - descuentoTotal - pagado;
+        console.log('antes de actualiza servicio');
+        batch.update(refServicio, {
+            comandasEnviadas: (0, firestore_1.increment)(1),
+            cantidad: (0, firestore_1.increment)(comanda.cantidad),
+            total: (0, firestore_1.increment)(Number(comanda.total.toFixed(2))),
+            flag_comandaPediente: true,
+            impuestosTotal: Number(salidaImpuestos.impuestoTotal.toFixed(2)),
+            impuestosDetalle: salidaImpuestos.bases,
+            descuentoServicio: descuentoServicio,
+            pendiente: Number(pendiente.toFixed(2)),
+            descuentoTotal: descuentoTotal
+        });
+        console.log('despues de actualiza servicio');
+        batch.set(refComanda, comanda);
+        console.log('despues de actualiza comanda');
+        batch.commit();
+        console.log('despues de commit');
     }
-    productosServicio.push(...productos);
-    let salidaImpuestos = (0, productos_helper_1.agruparImpuestos)(productosServicio);
-    let servicioTotal = servicio.total || 0;
-    let descuentoProductos = servicio.descuentoProductos || 0;
-    //Calcular los descuentos
-    let auxTotal = Number(servicioTotal.toFixed(2)) + Number(comanda.total.toFixed(2));
-    let auxTotalConDescuento = auxTotal - Number(descuentoProductos.toFixed(2));
-    let descuentoServicio = 0;
-    if (servicio.descuentoTipo == 'cantidad') {
-        descuentoServicio = servicio.descuentoCantidad || 0;
+    catch (error) {
+        console.error('Error al enviar comanda', error);
+        throw new Error('Error al enviar comanda: ' + error.message);
     }
-    if (servicio.descuentoTipo == 'porcentaje') {
-        descuentoServicio = auxTotalConDescuento * (servicio.descuentoCantidad || 0) / 100;
-    }
-    let pagado = servicio.pagado || 0;
-    let descuentoTotal = descuentoProductos + descuentoServicio;
-    let pendiente = auxTotalConDescuento - descuentoTotal - pagado;
-    batch.update(refServicio, {
-        comandasEnviadas: (0, firestore_1.increment)(1),
-        cantidad: (0, firestore_1.increment)(comanda.cantidad),
-        total: (0, firestore_1.increment)(Number(comanda.total.toFixed(2))),
-        flag_comandaPediente: true,
-        impuestosTotal: Number(salidaImpuestos.impuestoTotal.toFixed(2)),
-        impuestosDetalle: salidaImpuestos.bases,
-        descuentoServicio: descuentoServicio,
-        pendiente: Number(pendiente.toFixed(2)),
-        descuentoTotal: descuentoTotal
-    });
-    batch.set(refComanda, comanda);
-    batch.commit();
 }
