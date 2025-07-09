@@ -8,10 +8,10 @@ import { getID } from './texto.helper';
 import { Reserva } from '../interfaces/reserva.interface';
 import { ProductoComanda } from '../interfaces/producto-comanda.interface';
 import { Comanda } from '../interfaces/comanda.interface';
-import { collection, doc, increment, writeBatch } from 'firebase/firestore';
+import { collection, doc, increment, setDoc, writeBatch } from 'firebase/firestore';
 import { agruparImpuestos } from './productos.helper';
 
-export function modelarServicio(
+export function crearServicio(firestore: any, coleccion: string,
   establecimiento: Establecimiento,
   tipo: string,
   mesa: Mesa,
@@ -128,6 +128,9 @@ export function modelarServicio(
       servicio.descuentoTipo = 'porcentaje';
     }
   }
+
+  setDoc(doc(firestore, coleccion + '' + servicio.uid), servicio);
+
   return servicio;
 
 

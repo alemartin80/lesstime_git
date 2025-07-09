@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.modelarServicio = modelarServicio;
+exports.crearServicio = crearServicio;
 exports.enviarComanda = enviarComanda;
 const texto_helper_1 = require("./texto.helper");
 const firestore_1 = require("firebase/firestore");
 const productos_helper_1 = require("./productos.helper");
-function modelarServicio(establecimiento, tipo, mesa, nombreServicio, comensales, usuarioInput, reserva = {}) {
+function crearServicio(firestore, coleccion, establecimiento, tipo, mesa, nombreServicio, comensales, usuarioInput, reserva = {}) {
     let servicio = {};
     let hoy = new Date();
     servicio.mesas = [];
@@ -98,6 +98,7 @@ function modelarServicio(establecimiento, tipo, mesa, nombreServicio, comensales
             servicio.descuentoTipo = 'porcentaje';
         }
     }
+    (0, firestore_1.setDoc)((0, firestore_1.doc)(firestore, coleccion + '' + servicio.uid), servicio);
     return servicio;
 }
 function enviarComanda(firestore, coleccion, servicio, productos, observaciones, usuario) {
