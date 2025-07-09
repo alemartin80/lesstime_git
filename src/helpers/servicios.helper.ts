@@ -139,6 +139,7 @@ export function crearServicio(firestore: Firestore, coleccion: string,
 
 export function enviarComanda(firestore: Firestore, coleccion: string, servicio: Servicio, productos: ProductoComanda[], observaciones: string, usuario: UsuarioServicio) {
   try {
+    console.log('enviarComanda', coleccion, servicio.uid, productos, observaciones, usuario);
     let comanda: Comanda = {};
     comanda.cantidad = productos.reduce((anterior, producto) => anterior + (producto.cantidad || 0), 0);
     comanda.total = Number(productos.reduce((anterior, producto) => anterior + Number(producto.total), 0).toFixed(2));

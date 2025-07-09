@@ -103,6 +103,7 @@ function crearServicio(firestore, coleccion, establecimiento, tipo, mesa, nombre
 }
 function enviarComanda(firestore, coleccion, servicio, productos, observaciones, usuario) {
     try {
+        console.log('enviarComanda', coleccion, servicio.uid, productos, observaciones, usuario);
         let comanda = {};
         comanda.cantidad = productos.reduce((anterior, producto) => anterior + (producto.cantidad || 0), 0);
         comanda.total = Number(productos.reduce((anterior, producto) => anterior + Number(producto.total), 0).toFixed(2));
