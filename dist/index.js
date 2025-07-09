@@ -39,6 +39,7 @@ __exportStar(require("./interfaces/servicio.interface"), exports);
 __exportStar(require("./interfaces/usuario-servicio.interface"), exports);
 __exportStar(require("./interfaces/reserva.interface"), exports);
 __exportStar(require("./interfaces/producto-comanda.interface"), exports);
+__exportStar(require("./interfaces/comanda.interface"), exports);
 __exportStar(require("./helpers/productos.helper"), exports);
 __exportStar(require("./helpers/texto.helper"), exports);
 __exportStar(require("./helpers/firebase.helper"), exports);

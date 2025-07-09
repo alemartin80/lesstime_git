@@ -23,6 +23,7 @@ export * from './interfaces/servicio.interface';
 export * from './interfaces/usuario-servicio.interface';
 export * from './interfaces/reserva.interface';
 export * from './interfaces/producto-comanda.interface';
+export * from './interfaces/comanda.interface';
 export * from './helpers/productos.helper';
 export * from './helpers/texto.helper';
 export * from './helpers/firebase.helper';
